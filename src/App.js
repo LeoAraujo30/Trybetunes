@@ -27,17 +27,15 @@ class App extends React.Component {
     });
   }
 
-  logChange = () => {
-    const TIME = 2000;
+  logChange = async () => {
     const { userName } = this.state;
     this.setState({
       loading: true,
-    }, () => createUser({ name: userName }));
-    setTimeout(() => {
-      this.setState({
-        login: true,
-      });
-    }, TIME);
+    });
+    await createUser({ name: userName });
+    this.setState({
+      login: true,
+    });
   }
 
   render() {
