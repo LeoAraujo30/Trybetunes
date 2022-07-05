@@ -15,7 +15,7 @@ class App extends React.Component {
         <Switch>
           <Route exact path="/" render={ () => <Login /> } />
           <Route path="/search" render={ () => <Search /> } />
-          <Route path="/album/:id" render={ () => <Album /> } />
+          <Route path="/album/:id" render={ (props) => <Album { ...props } /> } />
           <Route path="/favorites" render={ () => <Favorites /> } />
           <Route exact path="/profile" render={ () => <Profile /> } />
           <Route path="/profile/edit" render={ () => <ProfileEdit /> } />
