@@ -1,6 +1,8 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import ArtistCard from '../components/ArtistCard';
 import Header from '../components/Header';
+import searchAlbumsAPI from '../services/searchAlbumsAPI';
+import Loading from '../components/Loading';
 
 class Search extends React.Component {
   constructor() {
@@ -8,6 +10,10 @@ class Search extends React.Component {
 
     this.state = {
       artist: '',
+      artResult: '',
+      loading: false,
+      search: false,
+      results: [],
     };
   }
 
@@ -19,9 +25,34 @@ class Search extends React.Component {
     });
   }
 
-  render() {
+  searchArtist = async () => {
     const { artist } = this.state;
+    const art = artist;
+    this.setState({
+      artist: '',
+      artResult: art,
+      loading: true,
+    });
+    const result = await searchAlbumsAPI(art);
+    this.setState({
+      loading: false,
+      search: true,
+      results: result,
+    });
+    // console.log(this.state);
+  }
+
+  render() {
+    const { artist, artResult, loading, search, results } = this.state;
     const MIN = 2;
+    if (loading === true) {
+      return (
+        <div>
+          <Header />
+          <Loading />
+        </div>
+      );
+    }
     return (
       <div data-testid="page-search">
         <Header />
@@ -38,18 +69,18 @@ class Search extends React.Component {
             type="button"
             data-testid="search-artist-button"
             disabled={ artist.length < MIN }
-            // onClick={ logChange }
+            onClick={ this.searchArtist }
           >
             Pesquisar
           </button>
         </label>
+        { search && <p>{ `Resultado de álbuns de: ${artResult}` }</p> }
+        { results.length === 0 && search
+          ? <p>Nenhum álbum foi encontrado</p>
+          : <ArtistCard albuns={ results } /> }
       </div>
     );
   }
 }
-
-Search.propTypes = {
-  // inpChange: PropTypes.func.isRequired,
-};
 
 export default Search;

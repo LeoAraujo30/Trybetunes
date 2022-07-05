@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Loading from '../pages/Loading';
+import Loading from './Loading';
 import { getUser } from '../services/userAPI';
 
 class Header extends React.Component {
@@ -13,10 +13,10 @@ class Header extends React.Component {
   }
 
   componentDidMount() {
-    this.userName();
+    this.getUserName();
   }
 
-  userName = async () => {
+  getUserName = async () => {
     const obj = await getUser();
     this.setState({
       user: obj.name,
